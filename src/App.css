@@ -1,38 +1,134 @@
-.App {
+/* Reset some default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Style the grid container */
+.grid-container {
+  display: grid;
+  grid-template-rows: repeat(3, 1fr); /* Three rows */
+  grid-gap: 10px;
+  padding: 20px;
+}
+
+/* Style the grid row */
+.grid-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* Five columns per row */
+  grid-gap: 10px;
+}
+
+/* Style the grid items */
+.grid-item {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Style the cards */
+.card {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* style for section images */
+section {
+  padding: 2rem 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+label {
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+  border: 1px dotted rgba(207, 188, 188, 0.925);
+  border-radius: 20px;
+  width: 14rem;
+  height: 14rem;
+  cursor: pointer;
+  font-size: large;
+}
+label p{
+  padding-top: 90px;
+}
+
+label span {
+  font-weight: lighter;
+  font-size: small;
+  padding-top: 0.5rem;
+}
+
+input {
+  display: none;
+}
+
+img {
+  padding: 0;
+  margin: 0;
+}
+
+.images {
+  display: flex;
+  /* display: inline-block; */
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.image {
+  margin: 1rem 0.5rem;
+  display: inline-block;
+  position: relative;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+  border: 1px solid rgba(207, 188, 188, 0.925);
+  border-radius: 5px;
+}
+
+.image button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  cursor: pointer;
+  border: none;
   color: white;
+  background-color: lightcoral;
 }
 
-.App-link {
-  color: #61dafb;
+.image button:hover {
+  background-color: red;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.image p {
+  padding: 0 0.5rem;
+  margin: 0;
+}
+
+.upload-btn {
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+  border: none;
+  border-radius: 20px;
+  width: 10rem;
+  height: 3rem;
+  color: white;
+  background-color: green;
+}
+
+label:hover,
+.upload-btn:hover {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+    rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+}
+
+.error {
+  text-align: center;
+}
+
+.error span {
+  color: red;
 }
