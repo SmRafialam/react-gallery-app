@@ -1,9 +1,15 @@
 import './App.css';
 import React, { useState } from "react";
+// import { GridContextProvider,GridDropZone,GridItem,swap } from "react-grid-dnd";
 
 function App() {
   const [selectedImages, setSelectedImages] = useState([]);
   // const [featuredImage, setFeaturedImage] = useState(null);
+
+  // type e = {React.DragEvent<HTMLDivElement>}
+  // interface e{
+
+  // }
 
   const onSelectFile = (event) => {
     const selectedFiles = event.target.files;
@@ -27,6 +33,27 @@ function App() {
     URL.revokeObjectURL(image);
   }
 
+  const onDragStart = (e, index) => {
+    e.dataTransfer.setData("text/plain", index);
+  };
+  
+  const onDragOver = (e) => {
+    e.preventDefault();
+  };
+  
+  const onDrop = (e, targetIndex) => {
+    e.preventDefault();
+    const sourceIndex = e.dataTransfer.getData("text/plain");
+    const updatedImages = [...selectedImages];
+  
+    // Swap the images based on the drag-and-drop
+    const sourceImage = updatedImages[sourceIndex];
+    updatedImages[sourceIndex] = updatedImages[targetIndex];
+    updatedImages[targetIndex] = sourceImage;
+  
+    setSelectedImages(updatedImages);
+  };
+
   return (
    <section>
     <div className="grid-container">
@@ -34,8 +61,15 @@ function App() {
 
       <div className="images">
           {selectedImages.map((image, index) => (
-            <div key={image} className={"image"}>
-              <img src={image} height="200" alt="upload" />
+            <div key={index} className={"image"} >
+              <img src={image} 
+                   height="200" 
+                   alt="upload" 
+                   draggable
+                   onDragStart={(e) => onDragStart(e, index)}
+                   onDragOver={(e) => onDragOver(e)}
+                   onDrop={(e) => onDrop(e, index)}
+              />
               <button onClick={() => deleteHandler(image)}>
                 Delete Image
               </button>
