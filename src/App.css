@@ -1,8 +1,19 @@
-/* Reset some default styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* background-color: #e9e8e8; */
+}
+h4{
+  background-color: #ffffff;
+  padding: 20px 66px;;
+
+  border-bottom: 1px solid rgba(58, 54, 54, 0.596);
+  border-radius: 10px 10px 0px 0px;
+}
+
+.dltBtn{
+  background-color: rgb(255, 0, 0);
 }
 
 /* Style the grid container */
@@ -27,10 +38,12 @@
 
 /* Style the cards */
 .card {
-  background-color: #f0f0f0;
+  /* background-color: #ffffff; */
   border: 1px solid #ddd;
-  padding: 10px;
   text-align: center;
+  /* background-color: #ffffff; */
+  border-radius: 10px;
+  margin: 0px 30px;
 }
 
 /* style for section images */
@@ -68,6 +81,8 @@ input {
 img {
   padding: 0;
   margin: 0;
+  background-color: #ffffff;
+  border-radius: 10px;
 }
 
 .images {
@@ -77,16 +92,19 @@ img {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  background-color: #ffffff;
+  border-radius: 10px;
 }
 
 .image {
   margin: 1rem 0.5rem;
-  display: inline-block;
+  /* display: inline-block; */
   position: relative;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
   border: 1px solid rgba(207, 188, 188, 0.925);
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: move;
+  padding: 5px;
 }
 
 .image button {
@@ -141,3 +159,76 @@ label:hover,
   width: 100%;
   cursor: -webkit-grab;
 }
+
+.upload-container label{
+  border-radius: 10px;
+}
+
+/* Style for selected images */
+.selected {
+  border: 2px solid red;
+}
+
+
+
+.image-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.image-wrapper label {
+  display: none;
+}
+
+.image-wrapper:hover label {
+  display: inline;
+  max-height: 0px;
+  border: none;
+  border-radius: 10px;
+  cursor: move;
+  margin-left: -150px;
+}
+/* 
+.selection-checkbox{
+margin-left: 500px;
+} */
+
+/* .image-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  transition: box-shadow 0.3s; 
+}
+
+.image-wrapper label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.image-wrapper label input[type="checkbox"] {
+  display: none;
+}
+
+.image-wrapper label::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border: none;
+  border-radius: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.image-wrapper:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
+} */

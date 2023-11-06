@@ -1,15 +1,14 @@
 import './App.css';
 import React, { useState } from "react";
-// import { GridContextProvider,GridDropZone,GridItem,swap } from "react-grid-dnd";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 function App() {
   const [selectedImages, setSelectedImages] = useState([]);
   // const [featuredImage, setFeaturedImage] = useState(null);
+  const [selectedImagesCount, setSelectedImagesCount] = useState(0);
+  // const [updatedSelectedImages, setUpdatedSelectedImages] = useState(Array(selectedImages.length).fill(false));
 
-  // type e = {React.DragEvent<HTMLDivElement>}
-  // interface e{
-
-  // }
 
   const onSelectFile = (event) => {
     const selectedFiles = event.target.files;
@@ -22,16 +21,45 @@ function App() {
     });
     console.log(imagesArray);
 
+    // Convert the array of image URLs to a single string with URLs separated by a comma
+    const imagesString = imagesArray.join(',');
+
+    // Now, imagesString contains the image URLs separated by a comma
+    console.log(imagesString);
+
     setSelectedImages((previousImages) => previousImages.concat(imagesArray));
 
     // FOR BUG IN CHROME
     event.target.value = "";
   };
+
+  const handleImageSelection = (index) => {
+    // const updatedSelectedImages = [...selectedImages];
+    // updatedSelectedImages[index] = !selectedImages[index];
+    // setSelectedImages(updatedSelectedImages);
+    //console.log(index);
+    const updatedSelectedImages = [...selectedImages];
+    console.log(updatedSelectedImages[index]);
+
+    updatedSelectedImages[index] = !selectedImages[index];
+    // Convert the array to a string, removing 'false' values
+    const selectedImagesString = updatedSelectedImages.filter(Boolean).join(', ');
+
+    console.log(selectedImagesString[index]);
+    // setSelectedImages(updatedSelectedImages);
+    const selectedCount = updatedSelectedImages.filter((image) => image).length;
+    setSelectedImagesCount(selectedCount);
+  };
+
+  // const updateSelectedImagesCount = (images) => {
+  //   const count = images.filter((image) => image).length;
+  //   setSelectedImagesCount(count);
+  // };
   
-  function deleteHandler(image) {
-    setSelectedImages(selectedImages.filter((e) => e !== image));
-    URL.revokeObjectURL(image);
-  }
+  // function deleteHandler(image) {
+  //   setSelectedImages(selectedImages.filter((e) => e !== image));
+  //   URL.revokeObjectURL(image);
+  // }
 
   const onDragStart = (e, index) => {
     e.dataTransfer.setData("text/plain", index);
@@ -54,26 +82,110 @@ function App() {
     setSelectedImages(updatedImages);
   };
 
+  const deleteSelectedImages = () => {
+    // Filter out selected images
+    const updatedImages = selectedImages.filter((selected, index) => !selected);
+    console.log(updatedImages)
+    // Revoke the URLs of the deleted images (be careful with this, as it can't be undone)
+    selectedImages.forEach((selected, index) => {
+        if (selected) {
+            URL.revokeObjectURL(selected);
+        }
+    });
+    // Set the updatedImages as the new selectedImages
+    setSelectedImages(updatedImages);
+
+    // Update the selected images count
+    const selectedCount = updatedImages.filter((image) => image).length;
+    setSelectedImagesCount(selectedCount);
+
+    console.log('Selected Images:', updatedImages);
+  };
+  
+  // const deleteSelectedImages = () => {
+  //   // Filter out the selected images
+  //   const updatedImages = selectedImages.filter((_, index) => !updatedSelectedImages[index]);
+  
+  //   // Revoke the URLs of the deleted images (be careful with this, as it can't be undone)
+  //   updatedSelectedImages.forEach((selected, index) => {
+  //     if (selected) {
+  //       URL.revokeObjectURL(selected);
+  //     }
+  //   });
+  
+  //   // Update the selectedImages state
+  //   setSelectedImages(updatedImages);
+  
+  //   // Update the selected images count
+  //   const selectedCount = updatedImages.filter((image) => image).length;
+  //   setSelectedImagesCount(selectedCount);
+  
+  //   // Clear the selected images array
+  //   setUpdatedSelectedImages(Array(selectedImages.length).fill(false));
+  
+  //   // Log the results to the console
+  //   console.log('Selected Images:', updatedImages);
+  // };
+  
+
   return (
    <section>
     <div className="grid-container">
-      <div className="card">
 
+      <div className="card">
+      <div className="header">
+        <h4 align="left">Gallery</h4>
+        <p>Selected Images:{selectedImagesCount} {selectedImages.filter((image) => image).length}</p> {/* Display the selected images count */}
+        <button className='dltBtn' onClick={deleteSelectedImages}>Delete</button>
+      </div>
       <div className="images">
           {selectedImages.map((image, index) => (
             <div key={index} className={"image"} >
-              <img src={image} 
-                   height="200" 
-                   alt="upload" 
-                   draggable
-                   onDragStart={(e) => onDragStart(e, index)}
-                   onDragOver={(e) => onDragOver(e)}
-                   onDrop={(e) => onDrop(e, index)}
+              {/* <div
+              className={`selection-checkbox ${
+                image.selected ? "selected" : ""
+              }`}
+              onClick={() => toggleImageSelection(index)}
+            >
+              {image.selected && <span>&#10003;</span>}
+            </div> */}
+            {/* <label>
+              <input
+                type="checkbox"
+                
               />
-              <button onClick={() => deleteHandler(image)}>
+            </label> */}
+            {/* <FormControlLabel control = {<Checkbox />} label = "Checkbox" /> */}
+            <div className="image-wrapper"  onDragStart={(e) => onDragStart(e, index)}>
+              <FormControlLabel 
+                control={<Checkbox checked={image.selected} 
+                  onClick={(data) => {      
+                    console.log(data.target.checked); 
+                    handleImageSelection(index);
+                    // return data.target.checked ? data.target.value : "";  
+                }}/>}
+                label=""
+                className={`selection-checkbox ${
+                  image.selected ? "selected" : ""
+                }`}
+              />
+
+                <img src={image} 
+                    height="200" 
+                    alt="upload" 
+                    draggable
+                    // onDragStart={(e) => onDragStart(e, index)}
+                    onDragOver={(e) => onDragOver(e)}
+                    onDrop={(e) => onDrop(e, index)}
+                />
+              </div>
+              {/* <button onClick={() => deleteHandler(image)}>
                 Delete Image
               </button>
-              <p>{index + 1}</p>
+              <p>{index + 1}</p> */}
+                {/* <p>Selected Images: {selectedImagesCount}</p> 
+                <br></br>
+                <button className='dltBtn' onClick={deleteSelectedImages}>Delete</button> */}
             </div>
 
           ))}
@@ -96,62 +208,6 @@ function App() {
     </div>
    </div>
   </section>
-    // <div className="grid-container">
-    //   <div className="grid-row">
-    //     <div className="grid-item">
-    //       <div className="card">Card 1</div>
-    //     </div>
-    //     <div className="grid-item">
-    //       <div className="card">Card 2</div>
-    //     </div>
-    //     <div className="grid-item">
-    //       <div className="card">Card 3</div>
-    //     </div>
-    //     <div className="grid-item">
-    //       <div className="card">Card 4</div>
-    //     </div>
-    //     <div className="grid-item">
-    //       <div className="card">Card 5</div>
-    //     </div>
-    //   </div>
-
-    //   <div className="grid-row">
-    //     <div className="grid-item">
-    //       <div className="card">Card 6</div>
-    //     </div>
-    //     <div className="grid-item">
-    //       <div className="card">Card 7</div>
-    //     </div>
-    //     <div className="grid-item">
-    //       <div className="card">Card 8</div>
-    //     </div>
-    //     <div className="grid-item">
-    //       <div className="card">Card 9</div>
-    //     </div>
-    //     <div className="grid-item">
-    //       <div className="card">Card 10</div>
-    //     </div>
-    //   </div>
-
-    //   {/* Row 3: 5 Grid Items */}
-    //   <div className="grid-row">
-    //     <div className="grid-item">
-    //       <div className="card">Card 11</div>
-    //     </div>
-    //     <div className="grid-item">
-    //       <div className="card">Card 12</div>
-    //     </div>
-    //     <div className="grid-item">
-    //       <div className="card">Card 13</div>
-    //     </div>
-    //     <div className="grid-item">
-    //       <div className="card">Card 14</div>
-    //     </div>
-    //     <div className="grid-item">
-    //       <div className="card">Card 15</div>
-    //     </div>
-    //   </div>
-    // </div>
   );
 }
 
